@@ -1,0 +1,3 @@
+'token' - String => 'Token of user.'
+'user_id' - int => 'Users id.'
+'full_name' - String => 'Users full name.'

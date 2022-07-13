@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "169584206031",
+    "project_id": "boszhandeliveryapp",
+    "storage_bucket": "boszhandeliveryapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169584206031:android:e9fccd3749d759981a57ba",
+        "android_client_info": {
+          "package_name": "com.example.boszhan_delivery_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169584206031-cenkvt414nqgnvupne5rinbapdte88pa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVwtZZilKYeRy8lTx15AnktLr4Z55Vbos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169584206031-cenkvt414nqgnvupne5rinbapdte88pa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
