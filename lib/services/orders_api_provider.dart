@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +34,7 @@ class OrdersProvider {
     var token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse(API_URL + 'api/delivery-order/' + id + '/change-status'),
+      Uri.parse(API_URL + 'api/driver/order/update/' + id),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer $token"
@@ -83,13 +82,14 @@ class OrdersProvider {
     var token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse(API_URL + 'api/delivery-order/' + id + '/reject'),
+      Uri.parse(API_URL + 'api/driver/order/update/' + id),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': "Bearer $token"
       },
       body: jsonEncode(<String, dynamic>{
+        "status_id": 4,
         "comment": comment,
       }),
     );
@@ -114,14 +114,14 @@ class OrdersProvider {
     var token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse(API_URL + 'api/delivery-order/' + id + '/change-payment-type'),
+      Uri.parse(API_URL + 'api/driver/order/update/' + id),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': "Bearer $token"
       },
       body: jsonEncode(<String, dynamic>{
-        "payment_type": type,
+        "payment_type_id": type,
         "kaspi_phone": phone,
         "payment_full": paymentFull,
         "payment_partial": amount
@@ -137,18 +137,18 @@ class OrdersProvider {
     }
   }
 
-  Future<String> changeBasket(String id, List<Basket> list) async {
+  Future<String> changeBasket(int id, double count) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse(API_URL + 'api/delivery-order/update'),
+      Uri.parse(API_URL + 'api/driver/basket/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': "Bearer $token"
       },
-      body: jsonEncode(<String, dynamic>{"order_id": id, "basket": list}),
+      body: jsonEncode(<String, dynamic>{"count": count}),
     );
 
     print(response.body);

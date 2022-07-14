@@ -41,9 +41,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   @override
   void initState() {
-    widget.order.status != 2
-        ? isButtonDisabled = true
-        : isButtonDisabled = false;
+    // widget.order.status != 2
+    //     ? isButtonDisabled = true
+    //     : isButtonDisabled = false;
     print('Order ID - ' + widget.order.id.toString());
     print(isButtonDisabled);
     super.initState();

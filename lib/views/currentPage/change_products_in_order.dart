@@ -213,25 +213,17 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
 
   void saveProducts(List<Basket> list) async {
     AppConstants.index = -1;
-    String status = '';
-    OrdersProvider()
-        .changeBasket(widget.order.id.toString(), list)
-        .then((value) => status = value)
-        .whenComplete(() {
-      if (status == 'Success') {
+    for (int i = 0; i < list.length; i++) {
+      OrdersProvider().changeBasket(list[i].id, list[i].count);
+      if (i == list.length - 1) {
         Navigator.pushAndRemoveUntil<dynamic>(
             context,
             MaterialPageRoute<dynamic>(
               builder: (BuildContext context) => HomePage(),
             ),
             (route) => false);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content:
-              Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-        ));
       }
-    });
+    }
   }
 
   void toHistory() async {

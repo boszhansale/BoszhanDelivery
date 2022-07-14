@@ -7,22 +7,21 @@ class HistoryBasket {
   double count = 0;
   int type = 0;
 
-  HistoryBasket({
-    required this.productId,
-    required this.name,
-    required this.price,
-    required this.allPrice,
-    required this.measureId,
-    required this.count,
-    required this.type
-  });
+  HistoryBasket(
+      {required this.productId,
+      required this.name,
+      required this.price,
+      required this.allPrice,
+      required this.measureId,
+      required this.count,
+      required this.type});
 
   HistoryBasket.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
-    name = json['name'];
+    name = json['product']['name'];
     price = json['price'];
     allPrice = double.parse(json['all_price'].toString());
-    measureId = json['measure_id'];
+    measureId = json['product']['measure'];
     count = double.parse(json['count'].toString());
     type = json['type'];
   }
@@ -30,10 +29,10 @@ class HistoryBasket {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['product_id'] = productId;
-    data['name'] = name;
+    data['product']['name'] = name;
     data['price'] = price;
     data['all_price'] = allPrice;
-    data['measure_id'] = measureId;
+    data['product']['measure'] = measureId;
     data['count'] = count;
     data['type'] = type;
     return data;

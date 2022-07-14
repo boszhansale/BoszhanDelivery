@@ -1,4 +1,3 @@
-import 'history_address.dart';
 import 'history_basket.dart';
 
 class HistoryOrder {
@@ -8,12 +7,12 @@ class HistoryOrder {
   int userId = 0;
   String deliveryTime = '';
   List<HistoryBasket> basket = [];
-  Address address = Address(latitude: '', longitude: '', deliveryTime: '');
+  // Address address = Address(latitude: '', longitude: '', deliveryTime: '');
   String createdAt = '';
-  String updatedAt = '';
+  // String updatedAt = '';
   int storeId = 0;
   var deliveredAt;
-  var deletedAt;
+  // var deletedAt;
   int status = 0;
   int paymentType = 0;
   int paymentStatus = 0;
@@ -25,38 +24,38 @@ class HistoryOrder {
       required this.userId,
       required this.deliveryTime,
       required this.basket,
-      required this.address,
+      // required this.address,
       required this.createdAt,
-      required this.updatedAt,
+      // required this.updatedAt,
       required this.storeId,
       this.deliveredAt,
-      this.deletedAt,
+      // this.deletedAt,
       required this.status,
       required this.paymentType,
       required this.paymentStatus});
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
-    name = json['store_name'];
-    storeAddress = json['store_address'];
+    name = json['store']['name'];
+    storeAddress = json['store']['address'];
     id = json['id'];
-    userId = json['salesrep_id'];
-    deliveryTime = json['delivery_time'];
-    if (json['basket'] != null) {
+    userId = json['salesrep']['id'];
+    deliveryTime = json['delivery_date'];
+    if (json['baskets'] != null) {
       basket = <HistoryBasket>[];
-      json['basket'].forEach((v) {
+      json['baskets'].forEach((v) {
         basket.add(HistoryBasket.fromJson(v));
       });
     }
-    address =
-        (json['address'] != null ? Address.fromJson(json['address']) : null)!;
+    // address =
+    //     (json['address'] != null ? Address.fromJson(json['address']) : null)!;
     createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    storeId = json['store_id'];
+    // updatedAt = json['updated_at'];
+    storeId = json['store']['id'];
     deliveredAt = json['delivered_at'];
-    deletedAt = json['deleted_at'];
-    status = json['status'];
-    paymentType = json['payment_type'];
-    paymentStatus = json['payment_status'];
+    // deletedAt = json['deleted_at'];
+    status = json['status']['id'];
+    paymentType = json['payment_type']['id'];
+    paymentStatus = json['payment_status']['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,12 +66,12 @@ class HistoryOrder {
     data['user_id'] = userId;
     data['delivery_time'] = deliveryTime;
     data['basket'] = basket.map((v) => v.toJson()).toList();
-    data['address'] = address.toJson();
+    // data['address'] = address.toJson();
     data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
+    // data['updated_at'] = updatedAt;
     data['store_id'] = storeId;
     data['delivered_at'] = deliveredAt;
-    data['deleted_at'] = deletedAt;
+    // data['deleted_at'] = deletedAt;
     data['status'] = status;
     data['payment_type'] = paymentType;
     data['payment_status'] = paymentStatus;
