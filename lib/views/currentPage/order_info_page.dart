@@ -192,10 +192,10 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                               child: Text("Отсрочка платежа"),
                               value: 3,
                             ),
-                            DropdownMenuItem(
-                              child: Text("Kaspi.kz"),
-                              value: 4,
-                            )
+                            // DropdownMenuItem(
+                            //   child: Text("Kaspi.kz"),
+                            //   value: 4,
+                            // )
                           ],
                           onChanged: (value) {
                             setState(() {

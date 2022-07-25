@@ -274,6 +274,7 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
 
   void deleteProductAction(int index) {
     setState(() {
+      OrdersProvider().deleteProductInOrder(widget.order.basket[index].id);
       widget.order.basket.removeAt(index);
     });
   }
