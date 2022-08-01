@@ -9,6 +9,7 @@ class Basket {
   double allPrice = 0;
   double count = 0;
   bool isChecked = false;
+  String article = '';
 
   Basket(
       {required this.id,
@@ -19,7 +20,8 @@ class Basket {
       required this.productId,
       required this.type,
       required this.allPrice,
-      required this.count});
+      required this.count,
+      required this.article});
 
   Basket.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,6 +33,7 @@ class Basket {
     type = json['type'];
     allPrice = double.parse(json['all_price'].toString());
     count = double.parse(json['count'].toString());
+    article = json['product']['article'];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +47,7 @@ class Basket {
     data['type'] = type;
     data['all_price'] = allPrice;
     data['count'] = count;
+    data['article'] = article;
     return data;
   }
 }

@@ -7,6 +7,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/auth_api_provider.dart';
+
 class CurrentOrdersPage extends StatefulWidget {
   @override
   _CurrentOrdersPageState createState() => _CurrentOrdersPageState();
@@ -14,10 +16,12 @@ class CurrentOrdersPage extends StatefulWidget {
 
 class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
   List<Order> orders = <Order>[];
+  String name = '';
 
   @override
   void initState() {
     getOrders();
+    getProfileInfo();
     super.initState();
   }
 
@@ -77,6 +81,19 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Загрузите данные.", style: TextStyle(fontSize: 20)),
+      ));
+    }
+  }
+
+  void getProfileInfo() async {
+    var response = await AuthProvider().getProfileInfo(1);
+    if (response != 'Error') {
+      setState(() {
+        name = response['full_name'];
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
       ));
     }
   }

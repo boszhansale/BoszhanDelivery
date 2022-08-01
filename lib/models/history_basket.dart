@@ -6,6 +6,7 @@ class HistoryBasket {
   int measureId = 0;
   double count = 0;
   int type = 0;
+  String article = '';
 
   HistoryBasket(
       {required this.productId,
@@ -14,7 +15,8 @@ class HistoryBasket {
       required this.allPrice,
       required this.measureId,
       required this.count,
-      required this.type});
+      required this.type,
+      required this.article});
 
   HistoryBasket.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -24,6 +26,7 @@ class HistoryBasket {
     measureId = json['product']['measure'];
     count = double.parse(json['count'].toString());
     type = json['type'];
+    article = json['product']['article'];
   }
 
   Map<String, dynamic> toJson() {

@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:boszhan_delivery_app/components/history_product_card.dart';
 import 'package:boszhan_delivery_app/models/history_order.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
-import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:boszhan_delivery_app/views/historyPage/printing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 import '../home_page.dart';
 
@@ -111,12 +116,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                                   label: const Text(
                                                       "Расходная накладная"),
                                                   onPressed: () {
-                                                    launch(AppConstants
-                                                            .baseUrl +
-                                                        'api/delivery-order/' +
-                                                        widget.order.id
-                                                            .toString() +
-                                                        '/rnk');
+                                                    createRNK();
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -142,12 +142,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                                       color: Colors.white),
                                                   label: const Text("Возвраты"),
                                                   onPressed: () {
-                                                    launch(AppConstants
-                                                            .baseUrl +
-                                                        'api/delivery-order/' +
-                                                        widget.order.id
-                                                            .toString() +
-                                                        '/vozvrat');
+                                                    createVozvrat();
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -172,12 +167,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                                       color: Colors.white),
                                                   label: const Text("ПКО"),
                                                   onPressed: () {
-                                                    launch(AppConstants
-                                                            .baseUrl +
-                                                        'api/delivery-order/' +
-                                                        widget.order.id
-                                                            .toString() +
-                                                        '/pko');
+                                                    createPKO();
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -231,5 +221,621 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               builder: (BuildContext context) => HomePage(),
             ),
             (route) => false));
+  }
+
+  void createRNK() async {
+    final pdf = pw.Document();
+
+    final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+    final ttf = pw.Font.ttf(font);
+
+    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    final ttfBold = pw.Font.ttf(fontBold);
+
+    double totalCount = 0;
+    double totalPrice = 0;
+    double totalCost = 0;
+
+    for (int i = 0; i < widget.order.basket.length; i++) {
+      totalCount += widget.order.basket[i].count;
+      totalPrice += widget.order.basket[i].price;
+      totalCost += widget.order.basket[i].price * widget.order.basket[i].count;
+    }
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.roll80,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 8),
+              pw.Text("Накладная на отпуск заказов на сторону",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("№${widget.order.id} от ${widget.order.deliveryTime}",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                  "Получатель ${widget.order.name}, ${widget.order.storeAddress}",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 6),
+              pw.Text("Склад: ${widget.order.driverName}",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 8),
+              pw.Table(border: pw.TableBorder.all(), children: [
+                pw.TableRow(children: [
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" № ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Наименование",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Артикул ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Ед.",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Кол ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Цена ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Сумма с НДС",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                ]),
+                for (var i = 0; i < widget.order.basket.length; i++)
+                  pw.TableRow(children: [
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text((i + 1).toString(),
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(widget.order.basket[i].name,
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(widget.order.basket[i].article,
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                              widget.order.basket[i].measureId == 1
+                                  ? " шт "
+                                  : " кг ",
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                              " " +
+                                  widget.order.basket[i].count.toString() +
+                                  " ",
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                              " " +
+                                  widget.order.basket[i].price.toString() +
+                                  " ",
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                              " " +
+                                  (widget.order.basket[i].count *
+                                          widget.order.basket[i].price)
+                                      .toInt()
+                                      .toString() +
+                                  " ",
+                              style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        ]),
+                  ]),
+                pw.TableRow(children: [
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("Итог",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalCount.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalPrice.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalCost.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                ])
+              ]),
+              pw.SizedBox(height: 6),
+              pw.Text("Всего отпущено количество запасов: $totalCount",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("на сумму: $totalCost KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Отпустил___________________________________________",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Получил____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Kaspi QR",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 6,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.BarcodeWidget(
+                  data:
+                      "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=$totalPrice",
+                  barcode: pw.Barcode.qrCode(),
+                  width: 100,
+                  height: 100),
+              pw.SizedBox(height: 6),
+            ],
+          );
+        }));
+
+    Directory directory = (await getApplicationDocumentsDirectory());
+    final file = File("${directory.path}/file.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    OpenFile.open('${directory.path}/file.pdf');
+  }
+
+  void createVozvrat() async {
+    final pdf = pw.Document();
+
+    final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+    final ttf = pw.Font.ttf(font);
+
+    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    final ttfBold = pw.Font.ttf(fontBold);
+
+    double totalCount = 0;
+    double totalPrice = 0;
+    double totalCost = 0;
+    int num = 0;
+
+    for (int i = 0; i < widget.order.basket.length; i++) {
+      totalCount += widget.order.basket[i].count;
+      if (widget.order.basket[i].type == 0) {
+        totalPrice += widget.order.basket[i].price;
+        totalCost +=
+            widget.order.basket[i].price * widget.order.basket[i].count;
+      } else {
+        totalPrice -= widget.order.basket[i].price;
+        totalCost -=
+            widget.order.basket[i].price * widget.order.basket[i].count;
+      }
+    }
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.roll80,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 8),
+              pw.Text("Возвратная накладная от покупателя",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("№${widget.order.id} от ${widget.order.deliveryTime}",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                  "Получатель ${widget.order.name}, ${widget.order.storeAddress}",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 6),
+              pw.Text("Склад: ${widget.order.driverName}",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 8),
+              pw.Table(border: pw.TableBorder.all(), children: [
+                pw.TableRow(children: [
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" № ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Наименование",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Артикул ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Ед.",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Кол ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Цена ",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" Сумма с НДС",
+                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                      ]),
+                ]),
+                for (var i = 0; i < widget.order.basket.length; i++)
+                  widget.order.basket[i].type == 1
+                      ? pw.TableRow(children: [
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text((num += 1).toString(),
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(widget.order.basket[i].name,
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(widget.order.basket[i].article,
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                    widget.order.basket[i].measureId == 1
+                                        ? " шт "
+                                        : " кг ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        widget.order.basket[i].count
+                                            .toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        widget.order.basket[i].price
+                                            .toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        (widget.order.basket[i].count *
+                                                widget.order.basket[i].price)
+                                            .toInt()
+                                            .toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                        ])
+                      : pw.TableRow(children: []),
+                pw.TableRow(children: [
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("Итог",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text("",
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalCount.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalPrice.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(" " + totalCost.toString(),
+                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                      ]),
+                ])
+              ]),
+              pw.SizedBox(height: 6),
+              pw.Text("Всего отпущено количество запасов: $totalCount",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("на сумму: $totalCost KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Отпустил___________________________________________",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Получил____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+            ],
+          );
+        }));
+
+    Directory directory = (await getApplicationDocumentsDirectory());
+    final file = File("${directory.path}/file.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    OpenFile.open('${directory.path}/file.pdf');
+  }
+
+  void createPKO() async {
+    final pdf = pw.Document();
+
+    final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+    final ttf = pw.Font.ttf(font);
+
+    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    final ttfBold = pw.Font.ttf(fontBold);
+
+    double totalCount = 0;
+    double totalPrice = 0;
+    double totalCost = 0;
+
+    for (int i = 0; i < widget.order.basket.length; i++) {
+      totalCount += widget.order.basket[i].count;
+      if (widget.order.basket[i].type == 0) {
+        totalPrice += widget.order.basket[i].price;
+        totalCost +=
+            widget.order.basket[i].price * widget.order.basket[i].count;
+      } else {
+        totalPrice -= widget.order.basket[i].price;
+        totalCost -=
+            widget.order.basket[i].price * widget.order.basket[i].count;
+      }
+    }
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.roll80,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 8),
+              pw.Text("КВИТАНЦИЯ",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("к приходному кассовому ордеру",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 6),
+              pw.Text("№${widget.order.id}",
+                  style: pw.TextStyle(
+                      font: ttfBold,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                  "Принято от: ${widget.order.name}, ${widget.order.storeAddress}",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 6),
+              pw.Text("Основание: оплата за мясную продукцию",
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 5,
+                  )),
+              pw.SizedBox(height: 6),
+              pw.Text("Сумма: $totalCost KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text(widget.order.deliveryTime,
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Кассир: ${widget.order.driverName}",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("Подпись____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+            ],
+          );
+        }));
+
+    Directory directory = (await getApplicationDocumentsDirectory());
+    final file = File("${directory.path}/file.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    OpenFile.open('${directory.path}/file.pdf');
   }
 }

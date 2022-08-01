@@ -16,23 +16,26 @@ class HistoryOrder {
   int status = 0;
   int paymentType = 0;
   int paymentStatus = 0;
+  String driverName = '';
 
-  HistoryOrder(
-      {required this.name,
-      required this.storeAddress,
-      required this.id,
-      required this.userId,
-      required this.deliveryTime,
-      required this.basket,
-      // required this.address,
-      required this.createdAt,
-      // required this.updatedAt,
-      required this.storeId,
-      this.deliveredAt,
-      // this.deletedAt,
-      required this.status,
-      required this.paymentType,
-      required this.paymentStatus});
+  HistoryOrder({
+    required this.name,
+    required this.storeAddress,
+    required this.id,
+    required this.userId,
+    required this.deliveryTime,
+    required this.basket,
+    // required this.address,
+    required this.createdAt,
+    // required this.updatedAt,
+    required this.storeId,
+    this.deliveredAt,
+    // this.deletedAt,
+    required this.status,
+    required this.paymentType,
+    required this.paymentStatus,
+    required this.driverName,
+  });
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
     name = json['store']['name'];
@@ -56,6 +59,7 @@ class HistoryOrder {
     status = json['status']['id'];
     paymentType = json['payment_type']['id'];
     paymentStatus = json['payment_status']['id'];
+    driverName = json['driver']['name'];
   }
 
   Map<String, dynamic> toJson() {

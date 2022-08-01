@@ -12,6 +12,7 @@ class Order {
   double totalCost = 0;
   double totalReturnsCost = 0;
   // String counterpartyName = '';
+  String driverName = '';
   int bonusGameSum = 0;
   int paymentTypeId = 1;
 
@@ -27,6 +28,7 @@ class Order {
     required this.totalCost,
     required this.totalReturnsCost,
     // required this.counterpartyName,
+    required this.driverName,
     required this.bonusGameSum,
     required this.paymentTypeId,
   });
@@ -48,6 +50,7 @@ class Order {
     totalCost = double.parse(json['purchase_price'].toString());
     totalReturnsCost = double.parse(json['return_price'].toString());
     // counterpartyName = json['counterparty_name'];
+    driverName = json['driver']['name'];
     bonusGameSum = json['bonus_game_sum'];
     paymentTypeId = json['payment_type']['id'];
   }

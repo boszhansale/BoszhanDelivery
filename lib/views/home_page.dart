@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
     var result = await VersionCheckProvider().check();
 
     if (result != 'Error') {
-      if (result['version'] != '0.5') {
+      if (result['version'] != '0.6') {
         setState(() {
           newVersion = true;
           version = result['version'];
