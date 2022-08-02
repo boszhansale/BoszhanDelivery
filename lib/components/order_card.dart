@@ -144,11 +144,15 @@ class OrderCard extends StatelessWidget {
   }
 
   void createRNK() async {
+    print(order.basket);
     final pdf = pw.Document();
     // final Uint8List fontRegular = File(aw()).readAsBytesSync();
 
     final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
     final ttf = pw.Font.ttf(font);
+
+    final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
+    final ttfThin = pw.Font.ttf(font);
 
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
@@ -156,6 +160,8 @@ class OrderCard extends StatelessWidget {
     double totalCount = 0;
     double totalPrice = 0;
     double totalCost = 0;
+
+    int num = 0;
 
     for (int i = 0; i < order.basket.length; i++) {
       totalCount += order.basket[i].count;
@@ -226,61 +232,78 @@ class OrderCard extends StatelessWidget {
                       ]),
                 ]),
                 for (var i = 0; i < order.basket.length; i++)
-                  pw.TableRow(children: [
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text((i + 1).toString(),
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(order.basket[i].name,
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.center,
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(order.basket[i].article,
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.center,
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(
-                              order.basket[i].measureId == 1 ? " шт " : " кг ",
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.center,
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(" " + order.basket[i].count.toString() + " ",
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text(" " + order.basket[i].price.toString() + " ",
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                    pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text(
-                              " " +
-                                  (order.basket[i].count *
-                                          order.basket[i].price)
-                                      .toInt()
-                                      .toString() +
-                                  " ",
-                              style: pw.TextStyle(fontSize: 5, font: ttf)),
-                        ]),
-                  ]),
+                  order.basket[i].type == 1
+                      ? pw.TableRow(children: [
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text((num += 1).toString(),
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(order.basket[i].name,
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(order.basket[i].article,
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                    order.basket[i].measureId == 1
+                                        ? " шт "
+                                        : " кг ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        order.basket[i].count.toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        order.basket[i].price.toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                    " " +
+                                        (order.basket[i].count *
+                                                order.basket[i].price)
+                                            .toInt()
+                                            .toString() +
+                                        " ",
+                                    style:
+                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                              ]),
+                        ])
+                      : pw.TableRow(children: []),
                 pw.TableRow(children: [
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
