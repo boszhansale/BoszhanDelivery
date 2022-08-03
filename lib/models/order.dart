@@ -15,23 +15,26 @@ class Order {
   String driverName = '';
   int bonusGameSum = 0;
   int paymentTypeId = 1;
+  double purchasePrice = 0;
+  double returnPrice = 0;
 
-  Order({
-    required this.id,
-    // required this.orderId,
-    required this.status,
-    required this.basket,
-    required this.deliveryAt,
-    required this.storeName,
-    required this.storeId,
-    required this.storeAddress,
-    required this.totalCost,
-    required this.totalReturnsCost,
-    // required this.counterpartyName,
-    required this.driverName,
-    required this.bonusGameSum,
-    required this.paymentTypeId,
-  });
+  Order(
+      {required this.id,
+      // required this.orderId,
+      required this.status,
+      required this.basket,
+      required this.deliveryAt,
+      required this.storeName,
+      required this.storeId,
+      required this.storeAddress,
+      required this.totalCost,
+      required this.totalReturnsCost,
+      // required this.counterpartyName,
+      required this.driverName,
+      required this.bonusGameSum,
+      required this.paymentTypeId,
+      required this.purchasePrice,
+      required this.returnPrice});
 
   Order.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,6 +56,8 @@ class Order {
     driverName = json['driver']['name'];
     bonusGameSum = json['bonus_game_sum'];
     paymentTypeId = json['payment_type']['id'];
+    purchasePrice = double.parse(json['purchase_price'].toString());
+    returnPrice = double.parse(json['return_price'].toString());
   }
 
   // Map<String, dynamic> toJson() {

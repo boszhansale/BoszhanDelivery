@@ -235,22 +235,13 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
 
-    double totalCount = 0;
     double totalPrice = 0;
-    double totalCost = 0;
 
     int num = 0;
 
     for (int i = 0; i < widget.order.basket.length; i++) {
-      totalCount += widget.order.basket[i].count;
       if (widget.order.basket[i].type == 0) {
         totalPrice += widget.order.basket[i].price;
-        totalCost +=
-            widget.order.basket[i].price * widget.order.basket[i].count;
-      } else {
-        totalPrice -= widget.order.basket[i].price;
-        totalCost -=
-            widget.order.basket[i].price * widget.order.basket[i].count;
       }
     }
 
@@ -333,7 +324,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       ]),
                 ]),
                 for (var i = 0; i < widget.order.basket.length; i++)
-                  widget.order.basket[i].type == 1
+                  widget.order.basket[i].type == 0
                       ? pw.TableRow(children: [
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -435,7 +426,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" " + totalCount.toString(),
+                        pw.Text(" " + num.toString(),
                             style: pw.TextStyle(fontSize: 5, font: ttfThin)),
                       ]),
                   pw.Column(
@@ -447,25 +438,26 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" " + totalCost.toString(),
+                        pw.Text(" " + widget.order.purchasePrice.toString(),
                             style: pw.TextStyle(fontSize: 5, font: ttfThin)),
                       ]),
                 ])
               ]),
               pw.SizedBox(height: 6),
-              pw.Text("Всего отпущено количество запасов: $totalCount",
+              pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("на сумму: $totalCost KZT",
+              pw.Text("на сумму: ${widget.order.purchasePrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+              pw.Text(
+                  "В том числе НДС (12%): ${(widget.order.purchasePrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
@@ -489,7 +481,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.SizedBox(height: 6),
               pw.BarcodeWidget(
                   data:
-                      "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=$totalPrice",
+                      "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=${widget.order.purchasePrice - widget.order.returnPrice}",
                   barcode: pw.Barcode.qrCode(),
                   width: 100,
                   height: 100),
@@ -517,21 +509,12 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
 
-    double totalCount = 0;
     double totalPrice = 0;
-    double totalCost = 0;
     int num = 0;
 
     for (int i = 0; i < widget.order.basket.length; i++) {
-      totalCount += widget.order.basket[i].count;
-      if (widget.order.basket[i].type == 0) {
+      if (widget.order.basket[i].type == 1) {
         totalPrice += widget.order.basket[i].price;
-        totalCost +=
-            widget.order.basket[i].price * widget.order.basket[i].count;
-      } else {
-        totalPrice -= widget.order.basket[i].price;
-        totalCost -=
-            widget.order.basket[i].price * widget.order.basket[i].count;
       }
     }
 
@@ -716,7 +699,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" " + totalCount.toString(),
+                        pw.Text(" " + num.toString(),
                             style: pw.TextStyle(fontSize: 5, font: ttfThin)),
                       ]),
                   pw.Column(
@@ -728,25 +711,26 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" " + totalCost.toString(),
+                        pw.Text(" " + widget.order.returnPrice.toString(),
                             style: pw.TextStyle(fontSize: 5, font: ttfThin)),
                       ]),
                 ])
               ]),
               pw.SizedBox(height: 6),
-              pw.Text("Всего отпущено количество запасов: $totalCount",
+              pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("на сумму: $totalCost KZT",
+              pw.Text("на сумму: ${widget.order.returnPrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+              pw.Text(
+                  "В том числе НДС (12%): ${(widget.order.returnPrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
@@ -843,13 +827,14 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                     fontSize: 5,
                   )),
               pw.SizedBox(height: 6),
-              pw.Text("Сумма: $totalCost KZT",
+              pw.Text("Сумма: ${widget.order.purchasePrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("В том числе НДС (12%): ${totalCost * 0.12} KZT",
+              pw.Text(
+                  "В том числе НДС (12%): ${(widget.order.purchasePrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: 6,

@@ -350,11 +350,11 @@ class OrderCard extends StatelessWidget {
                 ])
               ]),
               pw.SizedBox(height: 6),
-              pw.Text("Всего отпущено количество запасов: $totalCount",
+              pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
                       font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("на сумму: $totalCost KZT",
+              pw.Text("на сумму: ${order.purchasePrice} KZT",
                   style: pw.TextStyle(
                       font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
