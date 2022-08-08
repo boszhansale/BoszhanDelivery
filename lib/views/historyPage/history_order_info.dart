@@ -483,16 +483,16 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       fontSize: 6,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
-              pw.Text("Kaspi QR",
-                  style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
-              pw.SizedBox(height: 6),
               pw.BarcodeWidget(
                   data:
                       "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=${widget.order.purchasePrice - widget.order.returnPrice}",
                   barcode: pw.Barcode.qrCode(),
                   width: 120,
                   height: 120),
+              pw.SizedBox(height: 6),
+              pw.Text("Kaspi QR",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
             ],
           );
