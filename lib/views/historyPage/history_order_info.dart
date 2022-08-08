@@ -230,7 +230,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
-    final ttfThin = pw.Font.ttf(font);
+    final ttfThin = pw.Font.ttf(fontThin);
 
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
@@ -278,7 +278,15 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                     fontSize: 5,
                   )),
               pw.SizedBox(height: 8),
-              pw.Table(border: pw.TableBorder.all(), children: [
+              pw.Table(border: pw.TableBorder.all(), columnWidths: {
+                0: pw.FixedColumnWidth(10),
+                1: pw.FixedColumnWidth(150),
+                2: pw.FixedColumnWidth(35),
+                3: pw.FixedColumnWidth(20),
+                4: pw.FixedColumnWidth(30),
+                5: pw.FixedColumnWidth(30),
+                // 6: pw.FixedColumnWidth(30),
+              }, children: [
                 pw.TableRow(children: [
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -301,7 +309,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" Ед.",
+                        pw.Text(" Ед. ",
                             style: pw.TextStyle(font: ttf, fontSize: 5)),
                       ]),
                   pw.Column(
@@ -319,7 +327,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" Сумма с НДС",
+                        pw.Text(" Сумма с НДС ",
                             style: pw.TextStyle(font: ttf, fontSize: 5)),
                       ]),
                 ]),
@@ -483,8 +491,8 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   data:
                       "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=${widget.order.purchasePrice - widget.order.returnPrice}",
                   barcode: pw.Barcode.qrCode(),
-                  width: 100,
-                  height: 100),
+                  width: 120,
+                  height: 120),
               pw.SizedBox(height: 6),
             ],
           );
@@ -504,7 +512,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
-    final ttfThin = pw.Font.ttf(font);
+    final ttfThin = pw.Font.ttf(fontThin);
 
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
@@ -551,7 +559,15 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                     fontSize: 5,
                   )),
               pw.SizedBox(height: 8),
-              pw.Table(border: pw.TableBorder.all(), children: [
+              pw.Table(border: pw.TableBorder.all(), columnWidths: {
+                0: pw.FixedColumnWidth(10),
+                1: pw.FixedColumnWidth(150),
+                2: pw.FixedColumnWidth(35),
+                3: pw.FixedColumnWidth(20),
+                4: pw.FixedColumnWidth(30),
+                5: pw.FixedColumnWidth(30),
+                // 6: pw.FixedColumnWidth(30),
+              }, children: [
                 pw.TableRow(children: [
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -766,7 +782,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
-    final ttfThin = pw.Font.ttf(font);
+    final ttfThin = pw.Font.ttf(fontThin);
 
     final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
     final ttfBold = pw.Font.ttf(fontBold);
