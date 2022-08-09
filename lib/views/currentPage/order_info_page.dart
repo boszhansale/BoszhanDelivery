@@ -64,7 +64,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           backgroundColor: Colors.white,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(60.0),
-              child: buildAppBar('Выдача заказа')),
+              child: buildAppBar('Выдача заказа, ID = ${widget.order.id}')),
           body: Column(
             children: [
               Container(

@@ -50,7 +50,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
         appBar: AppBar(
             elevation: 0,
             centerTitle: true,
-            title: const Text('Выполненные заказы',
+            title: Text('Выполненные заказы, ID = ${widget.order.id}',
                 style: TextStyle(color: Colors.white, fontSize: 20)),
             actions: <Widget>[
               widget.order.status == 3 || widget.order.status == 5
