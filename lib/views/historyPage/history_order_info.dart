@@ -494,6 +494,14 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   style: pw.TextStyle(
                       font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
+              pw.Text("...",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text("...",
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
             ],
           );
         }));
