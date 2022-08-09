@@ -148,14 +148,18 @@ class OrderCard extends StatelessWidget {
     final pdf = pw.Document();
     // final Uint8List fontRegular = File(aw()).readAsBytesSync();
 
+    double fontSize = 6;
+    double mediumFontSize = 7;
+    double bigFontSize = 8;
+
     final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
-    final ttfThin = pw.Font.ttf(font);
+    final ttfThin = pw.Font.ttf(fontThin);
 
-    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
-    final ttfBold = pw.Font.ttf(fontBold);
+    // final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    // final ttfBold = pw.Font.ttf(fontBold);
 
     double totalCount = 0;
     double totalPrice = 0;
@@ -182,80 +186,88 @@ class OrderCard extends StatelessWidget {
             children: [
               pw.Text("№${order.id} от ${order.deliveryAt}",
                   style: pw.TextStyle(
-                      font: ttfBold,
-                      fontSize: 8,
+                      font: ttf,
+                      fontSize: bigFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 8),
-              pw.Table(border: pw.TableBorder.all(), children: [
+              pw.Table(border: pw.TableBorder.all(), columnWidths: {
+                0: pw.FixedColumnWidth(10),
+                1: pw.FixedColumnWidth(150),
+                2: pw.FixedColumnWidth(35),
+                3: pw.FixedColumnWidth(20),
+                4: pw.FixedColumnWidth(30),
+                5: pw.FixedColumnWidth(30),
+                // 6: pw.FixedColumnWidth(30),
+              }, children: [
                 pw.TableRow(children: [
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text(" № ",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text(" Наименование",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Артикул ",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                        pw.Text("Артикул",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Ед.",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                        pw.Text("Ед.",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Кол ",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                        pw.Text("Кол",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Цена ",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                        pw.Text("Цена",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Сумма с НДС",
-                            style: pw.TextStyle(font: ttfBold, fontSize: 5)),
+                        pw.Text("Сумма с НДС",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                 ]),
                 for (var i = 0; i < order.basket.length; i++)
                   order.basket[i].type == 1
                       ? pw.TableRow(children: [
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text((num += 1).toString(),
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
                                 pw.Text(order.basket[i].name,
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
                                 pw.Text(order.basket[i].article,
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -263,101 +275,104 @@ class OrderCard extends StatelessWidget {
                               children: [
                                 pw.Text(
                                     order.basket[i].measureId == 1
-                                        ? " шт "
-                                        : " кг ",
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                        ? "шт"
+                                        : "кг",
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        order.basket[i].count.toString() +
-                                        " ",
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                pw.Text(order.basket[i].count.toString(),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        order.basket[i].price.toString() +
-                                        " ",
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                pw.Text(order.basket[i].price.toString(),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                    " " +
-                                        (order.basket[i].count *
-                                                order.basket[i].price)
-                                            .toInt()
-                                            .toString() +
-                                        " ",
-                                    style:
-                                        pw.TextStyle(fontSize: 5, font: ttf)),
+                                    (order.basket[i].count *
+                                            order.basket[i].price)
+                                        .toInt()
+                                        .toString(),
+                                    style: pw.TextStyle(
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                         ])
                       : pw.TableRow(children: []),
                 pw.TableRow(children: [
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("Итог",
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + totalCount.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        pw.Text(totalCount.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + totalPrice.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        pw.Text(totalPrice.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + totalCost.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttf)),
+                        pw.Text(totalCost.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                 ])
               ]),
-              pw.SizedBox(height: 6),
+              pw.SizedBox(height: mediumFontSize),
               pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
-              pw.SizedBox(height: 6),
+                      font: ttfThin,
+                      fontSize: 6,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: mediumFontSize),
               pw.Text("на сумму: ${order.purchasePrice} KZT",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
-              pw.SizedBox(height: 6),
+                      font: ttfThin,
+                      fontSize: 6,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: mediumFontSize),
             ],
           );
         }));

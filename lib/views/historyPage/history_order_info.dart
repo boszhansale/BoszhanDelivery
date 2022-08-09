@@ -226,14 +226,18 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   void createRNK() async {
     final pdf = pw.Document();
 
+    double fontSize = 6;
+    double mediumFontSize = 7;
+    double bigFontSize = 8;
+
     final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
     final ttfThin = pw.Font.ttf(fontThin);
 
-    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
-    final ttfBold = pw.Font.ttf(fontBold);
+    // final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    // final ttfBold = pw.Font.ttf(fontBold);
 
     double totalPrice = 0;
 
@@ -254,28 +258,32 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: mediumFontSize,
                   )),
               pw.SizedBox(height: 8),
               pw.Text("Накладная на отпуск заказов на сторону",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("№${widget.order.id} от ${widget.order.deliveryTime}",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 8),
               pw.Text(
                   "Получатель ${widget.order.name}, ${widget.order.storeAddress}",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 6),
               pw.Text("Склад: ${widget.order.driverName}",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 8),
               pw.Table(border: pw.TableBorder.all(), columnWidths: {
@@ -291,55 +299,55 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" № ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("№",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text(" Наименование",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Артикул ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Артикул",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Ед. ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Ед.",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Кол ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Кол",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Цена ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Цена",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Сумма с НДС ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Сумма с НДС",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                 ]),
                 for (var i = 0; i < widget.order.basket.length; i++)
                   widget.order.basket[i].type == 0
                       ? pw.TableRow(children: [
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text((num += 1).toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -347,7 +355,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(widget.order.basket[i].name,
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -355,7 +363,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(widget.order.basket[i].article,
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -363,46 +371,36 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(
                                     widget.order.basket[i].measureId == 1
-                                        ? " шт "
-                                        : " кг ",
+                                        ? "шт"
+                                        : "кг",
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        widget.order.basket[i].count
-                                            .toString() +
-                                        " ",
+                                pw.Text(widget.order.basket[i].count.toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        widget.order.basket[i].price
-                                            .toString() +
-                                        " ",
+                                pw.Text(widget.order.basket[i].price.toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                    " " +
-                                        (widget.order.basket[i].count *
-                                                widget.order.basket[i].price)
-                                            .toInt()
-                                            .toString() +
-                                        " ",
+                                    (widget.order.basket[i].count *
+                                            widget.order.basket[i].price)
+                                        .toInt()
+                                        .toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                         ])
                       : pw.TableRow(children: []),
@@ -411,43 +409,50 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text("Итог",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(" Итог",
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + num.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(num.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + totalPrice.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(totalPrice.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + widget.order.purchasePrice.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(widget.order.purchasePrice.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                 ])
               ]),
@@ -455,32 +460,32 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("на сумму: ${widget.order.purchasePrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text(
                   "В том числе НДС (12%): ${(widget.order.purchasePrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Отпустил___________________________________________",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Получил____________________________________________",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.BarcodeWidget(
@@ -492,15 +497,21 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.SizedBox(height: 6),
               pw.Text("Kaspi QR",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("...",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("...",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 6, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
             ],
           );
@@ -515,6 +526,10 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
   void createVozvrat() async {
     final pdf = pw.Document();
+
+    double fontSize = 6;
+    double mediumFontSize = 7;
+    double bigFontSize = 8;
 
     final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
     final ttf = pw.Font.ttf(font);
@@ -543,28 +558,32 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: mediumFontSize,
                   )),
               pw.SizedBox(height: 8),
               pw.Text("Возвратная накладная от покупателя",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("№${widget.order.id} от ${widget.order.deliveryTime}",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 8),
               pw.Text(
                   "Получатель ${widget.order.name}, ${widget.order.storeAddress}",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 6),
               pw.Text("Склад: ${widget.order.driverName}",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 8),
               pw.Table(border: pw.TableBorder.all(), columnWidths: {
@@ -580,55 +599,55 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(" № ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("№",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text(" Наименование",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Артикул ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Артикул",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Ед.",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Ед.",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Кол ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Кол",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Цена ",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Цена",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" Сумма с НДС",
-                            style: pw.TextStyle(font: ttf, fontSize: 5)),
+                        pw.Text("Сумма с НДС",
+                            style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                 ]),
                 for (var i = 0; i < widget.order.basket.length; i++)
                   widget.order.basket[i].type == 1
                       ? pw.TableRow(children: [
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text((num += 1).toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -636,7 +655,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(widget.order.basket[i].name,
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -644,7 +663,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(widget.order.basket[i].article,
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -652,46 +671,36 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               children: [
                                 pw.Text(
                                     widget.order.basket[i].measureId == 1
-                                        ? " шт "
-                                        : " кг ",
+                                        ? "шт"
+                                        : "кг",
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        widget.order.basket[i].count
-                                            .toString() +
-                                        " ",
+                                pw.Text(widget.order.basket[i].count.toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                pw.Text(
-                                    " " +
-                                        widget.order.basket[i].price
-                                            .toString() +
-                                        " ",
+                                pw.Text(widget.order.basket[i].price.toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                           pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                    " " +
-                                        (widget.order.basket[i].count *
-                                                widget.order.basket[i].price)
-                                            .toInt()
-                                            .toString() +
-                                        " ",
+                                    (widget.order.basket[i].count *
+                                            widget.order.basket[i].price)
+                                        .toInt()
+                                        .toString(),
                                     style: pw.TextStyle(
-                                        fontSize: 5, font: ttfThin)),
+                                        fontSize: fontSize, font: ttfThin)),
                               ]),
                         ])
                       : pw.TableRow(children: []),
@@ -700,43 +709,50 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text("Итог",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(" Итог",
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text("",
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + num.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(num.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + totalPrice.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(totalPrice.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                   pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(" " + widget.order.returnPrice.toString(),
-                            style: pw.TextStyle(fontSize: 5, font: ttfThin)),
+                        pw.Text(widget.order.returnPrice.toString(),
+                            style: pw.TextStyle(
+                                fontSize: fontSize, font: ttfThin)),
                       ]),
                 ])
               ]),
@@ -744,32 +760,32 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.Text("Всего отпущено количество запасов: $num",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("на сумму: ${widget.order.returnPrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text(
                   "В том числе НДС (12%): ${(widget.order.returnPrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Отпустил___________________________________________",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Получил____________________________________________",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
             ],
@@ -786,31 +802,15 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   void createPKO() async {
     final pdf = pw.Document();
 
+    double fontSize = 6;
+    double mediumFontSize = 7;
+    double bigFontSize = 8;
+
     final font = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
     final ttf = pw.Font.ttf(font);
 
     final fontThin = await rootBundle.load("assets/fonts/Roboto-Thin.ttf");
     final ttfThin = pw.Font.ttf(fontThin);
-
-    final fontBold = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
-    final ttfBold = pw.Font.ttf(fontBold);
-
-    double totalCount = 0;
-    double totalPrice = 0;
-    double totalCost = 0;
-
-    for (int i = 0; i < widget.order.basket.length; i++) {
-      totalCount += widget.order.basket[i].count;
-      if (widget.order.basket[i].type == 0) {
-        totalPrice += widget.order.basket[i].price;
-        totalCost +=
-            widget.order.basket[i].price * widget.order.basket[i].count;
-      } else {
-        totalPrice -= widget.order.basket[i].price;
-        totalCost -=
-            widget.order.basket[i].price * widget.order.basket[i].count;
-      }
-    }
 
     pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.roll80,
@@ -821,65 +821,69 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.Text("ТОО \"Первомайские деликатесы\" (БИН 130740008859)",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: mediumFontSize,
                   )),
               pw.SizedBox(height: 8),
               pw.Text("КВИТАНЦИЯ",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("к приходному кассовому ордеру",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: mediumFontSize,
                   )),
               pw.SizedBox(height: 6),
               pw.Text("№${widget.order.id}",
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      font: ttf,
+                      fontSize: bigFontSize,
+                      fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text(
                   "Принято от: ${widget.order.name}, ${widget.order.storeAddress}",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 6),
               pw.Text("Основание: оплата за мясную продукцию",
                   style: pw.TextStyle(
                     font: ttf,
-                    fontSize: 5,
+                    fontSize: fontSize,
                   )),
               pw.SizedBox(height: 6),
               pw.Text("Сумма: ${widget.order.purchasePrice} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text(
                   "В том числе НДС (12%): ${(widget.order.purchasePrice / 112 * 12).roundToDouble()} KZT",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text(widget.order.deliveryTime,
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Кассир: ${widget.order.driverName}",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Подпись____________________________________________",
                   style: pw.TextStyle(
                       font: ttfThin,
-                      fontSize: 6,
+                      fontSize: mediumFontSize,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
             ],

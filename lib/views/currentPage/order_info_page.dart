@@ -192,10 +192,10 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                               child: Text("Отсрочка платежа"),
                               value: 3,
                             ),
-                            // DropdownMenuItem(
-                            //   child: Text("Kaspi.kz"),
-                            //   value: 4,
-                            // )
+                            DropdownMenuItem(
+                              child: Text("Kaspi.kz"),
+                              value: 4,
+                            )
                           ],
                           onChanged: (value) {
                             setState(() {
@@ -226,7 +226,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   //         },
                   //       )
                   //     : Container(),
-                  _value == 4 || _value == 1
+                  // _value == 4 ||
+                  _value == 1
                       ? SizedBox(
                           height: 60,
                           child: DropdownButton(
@@ -250,7 +251,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                               },
                               hint: const Text("Select item")))
                       : Container(),
-                  (_value2 == 2 && _value == 4) || (_value == 1 && _value2 == 2)
+                  // (_value2 == 2 && _value == 4) ||
+                  (_value == 1 && _value2 == 2)
                       ? TextFormField(
                           controller: amountController,
                           decoration:
@@ -572,7 +574,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     String status = '';
     bool paymentFull = true;
     _value2 == 2 ? paymentFull = false : true;
-    if (paymentType == 4 || paymentType == 1) {
+    // if (paymentType == 4 || paymentType == 1) {
+    if (paymentType == 1) {
       if (_value2 == 2) {
         if (amountController.text != '' &&
             int.parse(amountController.text) < widget.order.totalCost) {
