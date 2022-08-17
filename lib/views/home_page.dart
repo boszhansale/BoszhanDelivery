@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   String name = '';
   String nal = '';
   String bezNal = '';
+  String kaspi = '';
 
   bool newVersion = false;
   String version = '0.1';
@@ -130,6 +131,13 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 0),
                       child: Text('Безналичные: ' + bezNal,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Text('Kaspi.kz: ' + kaspi,
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
@@ -261,6 +269,7 @@ class _HomePageState extends State<HomePage> {
         name = response['full_name'];
         nal = response['cash'].toString() + ' тг.';
         bezNal = response['card'].toString() + ' тг.';
+        kaspi = response['kaspi'].toString() + ' тг.';
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -277,7 +286,7 @@ class _HomePageState extends State<HomePage> {
     var result = await VersionCheckProvider().check();
 
     if (result != 'Error') {
-      if (result['version'] != '1.1') {
+      if (result['version'] != AppConstants.appVersion) {
         setState(() {
           newVersion = true;
           version = result['version'];
