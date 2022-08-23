@@ -35,7 +35,10 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
             Icons.shopping_cart_outlined,
             color: Colors.white,
           )),
-      title: Text(widget.basket.name, style: const TextStyle(fontSize: 20)),
+      title: Text(widget.basket.name,
+          style: TextStyle(
+              fontSize: 20,
+              color: widget.basket.type == 0 ? Colors.black : Colors.red)),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(children: [

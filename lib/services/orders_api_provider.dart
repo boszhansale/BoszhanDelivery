@@ -165,7 +165,7 @@ class OrdersProvider {
     var token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse(API_URL + 'api/delivery-order/' + id + '/back'),
+      Uri.parse(API_URL + 'api/driver/basket/initial-state/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
