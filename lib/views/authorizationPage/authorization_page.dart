@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:boszhan_delivery_app/services/auth_api_provider.dart';
 import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,6 +70,98 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             });
+      }
+    });
+
+    bg.BackgroundGeolocation.onMotionChange((bg.Location location) async {
+      print('[motionchange long] - ${location.coords.longitude}');
+      print('[motionchange lat] - ${location.coords.latitude}');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile) {
+        AuthProvider()
+            .sendLocation(location.coords.latitude, location.coords.longitude);
+        if (prefs.getString("CoordsData") != null) {
+          var list = jsonDecode(prefs.getString("CoordsData")!);
+          for (int i = 0; i < list.length; i++) {
+            if (list[i]["isSended"] == false) {
+              var response =
+                  AuthProvider().sendLocation(list[i]['lat'], list[i]['long']);
+              if (response != "Error") {
+                list[i]["isSended"] = true;
+              }
+            }
+          }
+          prefs.setString("CoordsData", jsonEncode(list));
+        }
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+        AuthProvider()
+            .sendLocation(location.coords.latitude, location.coords.longitude);
+        if (prefs.getString("CoordsData") != null) {
+          var list = jsonDecode(prefs.getString("CoordsData")!);
+          for (int i = 0; i < list.length; i++) {
+            if (list[i]["isSended"] == false) {
+              var response =
+                  AuthProvider().sendLocation(list[i]['lat'], list[i]['long']);
+              if (response != "Error") {
+                list[i]["isSended"] = true;
+              }
+            }
+          }
+          prefs.setString("CoordsData", jsonEncode(list));
+        }
+      } else {
+        if (prefs.getString("CoordsData") != null) {
+          var list = jsonDecode(prefs.getString("CoordsData")!);
+          if (list.length > 50) {
+            list.removeAt(0);
+            list.add({
+              "lat": location.coords.latitude,
+              "long": location.coords.longitude,
+              "isSended": false
+            });
+          } else {
+            list.add({
+              "lat": location.coords.latitude,
+              "long": location.coords.longitude,
+              "isSended": false
+            });
+          }
+          prefs.setString("CoordsData", jsonEncode(list));
+        } else {
+          var list = [];
+          if (list.length > 50) {
+            list.removeAt(0);
+            list.add({
+              "lat": location.coords.latitude,
+              "long": location.coords.longitude,
+              "isSended": false
+            });
+          } else {
+            list.add({
+              "lat": location.coords.latitude,
+              "long": location.coords.longitude,
+              "isSended": false
+            });
+          }
+          prefs.setString("CoordsData", jsonEncode(list));
+        }
+      }
+    });
+
+    bg.BackgroundGeolocation.ready(bg.Config(
+            desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+            distanceFilter: 100.0,
+            stopOnTerminate: false,
+            startOnBoot: true,
+            debug: false,
+            logLevel: bg.Config.LOG_LEVEL_VERBOSE))
+        .then((bg.State state) {
+      if (!state.enabled) {
+        ////
+        // 3.  Start the plugin.
+        //
+        bg.BackgroundGeolocation.start();
       }
     });
 

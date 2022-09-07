@@ -73,4 +73,29 @@ class AuthProvider {
       return result;
     }
   }
+
+  Future<String> sendLocation(double lat, double long) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse(API_URL + 'api/position'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer $token"
+      },
+      body: jsonEncode(<String, dynamic>{
+        "lat": lat,
+        "lng": long,
+      }),
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return 'Success';
+    } else {
+      return 'Error';
+    }
+  }
 }

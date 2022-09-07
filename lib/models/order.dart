@@ -9,6 +9,8 @@ class Order {
   String storeName = '';
   int storeId = 0;
   String storeAddress = '';
+  var storeLat = '';
+  var storeLng = '';
   double totalCost = 0;
   double totalReturnsCost = 0;
   // String counterpartyName = '';
@@ -27,6 +29,8 @@ class Order {
       required this.storeName,
       required this.storeId,
       required this.storeAddress,
+      required this.storeLat,
+      required this.storeLng,
       required this.totalCost,
       required this.totalReturnsCost,
       // required this.counterpartyName,
@@ -50,6 +54,12 @@ class Order {
     storeName = json['store']['name'];
     storeId = json['store']['id'];
     storeAddress = json['store']['address'];
+    if (json['store']['lat'] != null) {
+      storeLat = json['store']['lat'];
+    }
+    if (json['store']['lng'] != null) {
+      storeLng = json['store']['lng'];
+    }
     totalCost = double.parse(json['purchase_price'].toString());
     totalReturnsCost = double.parse(json['return_price'].toString());
     // counterpartyName = json['counterparty_name'];

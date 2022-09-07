@@ -36,6 +36,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
         isContainsDeliveryBasket = true;
       }
     }
+    print(widget.order.salesRepId);
     super.initState();
   }
 
@@ -490,7 +491,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
               pw.SizedBox(height: 6),
               pw.BarcodeWidget(
                   data:
-                      "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&amount=${widget.order.purchasePrice - widget.order.returnPrice}",
+                      "https://kaspi.kz/pay/pervdelic?service_id=4494&7068=${widget.order.id}&8250=${widget.order.salesRepId}&amount=${widget.order.purchasePrice - widget.order.returnPrice}",
                   barcode: pw.Barcode.qrCode(),
                   width: 120,
                   height: 120),

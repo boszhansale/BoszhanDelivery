@@ -19,6 +19,7 @@ class HistoryOrder {
   String driverName = '';
   double purchasePrice = 0;
   double returnPrice = 0;
+  int salesRepId = 0;
 
   HistoryOrder({
     required this.name,
@@ -39,6 +40,7 @@ class HistoryOrder {
     required this.driverName,
     required this.purchasePrice,
     required this.returnPrice,
+    required this.salesRepId,
   });
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
@@ -66,6 +68,7 @@ class HistoryOrder {
     driverName = json['driver']['name'];
     purchasePrice = double.parse(json['purchase_price'].toString());
     returnPrice = double.parse(json['return_price'].toString());
+    salesRepId = json['salesrep']['id'];
   }
 
   Map<String, dynamic> toJson() {

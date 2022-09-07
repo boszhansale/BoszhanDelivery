@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.boszhan_delivery_app">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -15,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
    <application
+       tools:replace="android:label"
         android:label="Delivery App"
         android:icon="@mipmap/ic_launcher">
         <activity
