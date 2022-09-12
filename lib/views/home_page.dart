@@ -194,6 +194,8 @@ class _HomePageState extends State<HomePage> {
                           child: const Text("ЗАГРУЗИТЬ"),
                           onPressed: () {
                             downloadAction();
+                            checkVersion();
+                            getProfileInfo();
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.blue,
