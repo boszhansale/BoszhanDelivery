@@ -12,5 +12,5 @@ class AppConstants {
   static final String baseUrl = "https://boszhan.kz/";
   static int index = -1;
   static String value = '';
-  static String appVersion = '1.6';
+  static String appVersion = '1.7';
 }
