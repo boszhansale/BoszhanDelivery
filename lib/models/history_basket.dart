@@ -7,16 +7,19 @@ class HistoryBasket {
   double count = 0;
   int type = 0;
   String article = '';
+  String refundReason = '';
 
-  HistoryBasket(
-      {required this.productId,
-      required this.name,
-      required this.price,
-      required this.allPrice,
-      required this.measureId,
-      required this.count,
-      required this.type,
-      required this.article});
+  HistoryBasket({
+    required this.productId,
+    required this.name,
+    required this.price,
+    required this.allPrice,
+    required this.measureId,
+    required this.count,
+    required this.type,
+    required this.article,
+    required this.refundReason,
+  });
 
   HistoryBasket.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -27,6 +30,11 @@ class HistoryBasket {
     count = double.parse(json['count'].toString());
     type = json['type'];
     article = json['product']['article'];
+    if (json['type'] == 1) {
+      refundReason = json['reason_refund']['title'];
+    } else {
+      refundReason = '';
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -286,6 +286,12 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                     font: ttf,
                     fontSize: fontSize,
                   )),
+              pw.SizedBox(height: 6),
+              pw.Text("Торговый: ${widget.order.salesRepName}",
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontSize: fontSize,
+                  )),
               pw.SizedBox(height: 8),
               pw.Table(border: pw.TableBorder.all(), columnWidths: {
                 0: pw.FixedColumnWidth(10),
@@ -312,7 +318,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text("Артикул",
+                        pw.Text("Арт.",
                             style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
@@ -444,7 +450,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(totalPrice.toString(),
+                        pw.Text('',
                             style: pw.TextStyle(
                                 fontSize: fontSize, font: ttfThin)),
                       ]),
@@ -484,6 +490,13 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Получил____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttfThin,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                  "Дата, время печати: ${DateTime.now().toString().substring(0, 16)}",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: mediumFontSize,
@@ -586,6 +599,12 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                     font: ttf,
                     fontSize: fontSize,
                   )),
+              pw.SizedBox(height: 6),
+              pw.Text("Торговый: ${widget.order.salesRepName}",
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontSize: fontSize,
+                  )),
               pw.SizedBox(height: 8),
               pw.Table(border: pw.TableBorder.all(), columnWidths: {
                 0: pw.FixedColumnWidth(10),
@@ -612,7 +631,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text("Артикул",
+                        pw.Text("Арт.",
                             style: pw.TextStyle(font: ttf, fontSize: fontSize)),
                       ]),
                   pw.Column(
@@ -654,7 +673,10 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
                               mainAxisAlignment: pw.MainAxisAlignment.center,
                               children: [
-                                pw.Text(widget.order.basket[i].name,
+                                pw.Text(
+                                    widget.order.basket[i].name +
+                                        '\n' +
+                                        'Причина: ${widget.order.basket[i].refundReason}',
                                     style: pw.TextStyle(
                                         fontSize: fontSize, font: ttfThin)),
                               ]),
@@ -744,7 +766,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
-                        pw.Text(totalPrice.toString(),
+                        pw.Text("",
                             style: pw.TextStyle(
                                 fontSize: fontSize, font: ttfThin)),
                       ]),
@@ -784,6 +806,13 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Получил____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttfThin,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                  "Дата, время печати: ${DateTime.now().toString().substring(0, 16)}",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: mediumFontSize,
@@ -882,6 +911,13 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 6),
               pw.Text("Подпись____________________________________________",
+                  style: pw.TextStyle(
+                      font: ttfThin,
+                      fontSize: mediumFontSize,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                  "Дата, время печати: ${DateTime.now().toString().substring(0, 16)}",
                   style: pw.TextStyle(
                       font: ttfThin,
                       fontSize: mediumFontSize,

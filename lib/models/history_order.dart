@@ -20,28 +20,29 @@ class HistoryOrder {
   double purchasePrice = 0;
   double returnPrice = 0;
   int salesRepId = 0;
+  String salesRepName = '';
 
-  HistoryOrder({
-    required this.name,
-    required this.storeAddress,
-    required this.id,
-    required this.userId,
-    required this.deliveryTime,
-    required this.basket,
-    // required this.address,
-    required this.createdAt,
-    // required this.updatedAt,
-    required this.storeId,
-    this.deliveredAt,
-    // this.deletedAt,
-    required this.status,
-    required this.paymentType,
-    required this.paymentStatus,
-    required this.driverName,
-    required this.purchasePrice,
-    required this.returnPrice,
-    required this.salesRepId,
-  });
+  HistoryOrder(
+      {required this.name,
+      required this.storeAddress,
+      required this.id,
+      required this.userId,
+      required this.deliveryTime,
+      required this.basket,
+      // required this.address,
+      required this.createdAt,
+      // required this.updatedAt,
+      required this.storeId,
+      this.deliveredAt,
+      // this.deletedAt,
+      required this.status,
+      required this.paymentType,
+      required this.paymentStatus,
+      required this.driverName,
+      required this.purchasePrice,
+      required this.returnPrice,
+      required this.salesRepId,
+      required this.salesRepName});
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
     name = json['store']['name'];
@@ -69,6 +70,7 @@ class HistoryOrder {
     purchasePrice = double.parse(json['purchase_price'].toString());
     returnPrice = double.parse(json['return_price'].toString());
     salesRepId = json['salesrep']['id'];
+    salesRepName = json['salesrep']['name'];
   }
 
   Map<String, dynamic> toJson() {
