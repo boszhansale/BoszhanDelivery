@@ -57,6 +57,7 @@ dependencies:
   geolocator: ^8.2.1
   workmanager: ^0.5.0
   flutter_background_geolocation: ^4.6.3
+  yandex_mapkit: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +84,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - assets/icons/route_end.png
+    - assets/icons/route_start.png
+    - assets/icons/route_stop_by.png
     - assets/fonts/Roboto-Regular.ttf
     - assets/fonts/Roboto-Bold.ttf
     - assets/fonts/Roboto-Thin.ttf

@@ -1,49 +1,89 @@
 import 'dart:async';
+import 'dart:math';
+
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  MapPage(this.lat, this.lng);
+  final double lat;
+  final double lng;
 
   @override
   State<MapPage> createState() => MapPageState();
 }
 
 class MapPageState extends State<MapPage> {
-  final Completer<GoogleMapController> _mapController = Completer();
+  final List<DrivingSessionResult> results = [];
+  late Future<DrivingSessionResult> result;
+  late DrivingSession session;
+  late YandexMapController controller;
+  double currentLat = 43.374555;
+  double currentLng = 76.930951;
 
-  bool justBool = true;
+  final List<MapObject> mapObjects = [];
+  List<PlacemarkMapObject> placeMarkers = [];
+  final animation =
+      const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
 
-  static const CameraPosition _initialCameraPosition = CameraPosition(
-    target: LatLng(43.374555, 76.930951),
-    zoom: 14.4756,
-  );
+  void getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
-  static const CameraPosition _goingCameraPosition = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(43.374555, 76.930951),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414
-  );
+    setState(() {
+      var startPlacemark = PlacemarkMapObject(
+        mapId: const MapObjectId('start_placemark'),
+        point:
+            Point(latitude: position.latitude, longitude: position.longitude),
+        icon: PlacemarkIcon.single(PlacemarkIconStyle(
+            image:
+                BitmapDescriptor.fromAssetImage('assets/icons/route_start.png'),
+            scale: 0.4)),
+      );
 
-  static const marker1 =  Marker(
-    markerId: MarkerId('id-1'),
-    position: LatLng(43.374555, 76.930951),
-    infoWindow: InfoWindow(title: "Первомайские деликатесы!")
-  );
+      var endPlacemark = PlacemarkMapObject(
+          mapId: const MapObjectId('end_placemark'),
+          point: Point(latitude: widget.lat, longitude: widget.lng),
+          icon: PlacemarkIcon.single(PlacemarkIconStyle(
+              image:
+                  BitmapDescriptor.fromAssetImage('assets/icons/route_end.png'),
+              scale: 0.4)));
 
-  final Set<Marker> _markers = {marker1};
+      mapObjects.add(startPlacemark);
+      mapObjects.add(endPlacemark);
+      placeMarkers.add(startPlacemark);
+      placeMarkers.add(endPlacemark);
 
-  bool get wantKeepAlive => true;
+      _requestRoutes();
+      _init();
+    });
+
+    final newBounds = BoundingBox(
+      northEast: placeMarkers[0].point,
+      southWest: placeMarkers[1].point,
+    );
+    await controller.moveCamera(
+        CameraUpdate.newTiltAzimuthBounds(newBounds, azimuth: 1, tilt: 1),
+        animation: animation);
+    await controller.moveCamera(CameraUpdate.zoomOut(), animation: animation);
+
+    // await controller.moveCamera(
+    //     CameraUpdate.newCameraPosition(CameraPosition(
+    //         target: Point(latitude: widget.lat, longitude: widget.lng))),
+    //     animation: animation);
+  }
 
   @override
   void initState() {
     super.initState();
+    getCurrentLocation();
   }
 
   @override
   void dispose() {
+    _close();
     super.dispose();
   }
 
@@ -51,38 +91,93 @@ class MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: buildAppBar('Просмотр заказа')
-      ),
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _initialCameraPosition,
-        onMapCreated: (GoogleMapController controller) {
-          _mapController.complete(controller);
-          _onMapCreated(controller);
-        },
-        markers: _markers
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('Go to!'),
-        icon: const Icon(Icons.my_location),
+          preferredSize: Size.fromHeight(60.0), child: buildAppBar('Карта')),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height - 60,
+        child: YandexMap(
+          mapObjects: mapObjects,
+          onMapCreated: (YandexMapController yandexMapController) async {
+            controller = yandexMapController;
+
+            final cameraPosition = await controller.getCameraPosition();
+            final minZoom = await controller.getMinZoom();
+            final maxZoom = await controller.getMaxZoom();
+
+            print('Camera position: $cameraPosition');
+            print('Min zoom: $minZoom, Max zoom: $maxZoom');
+          },
+          onCameraPositionChanged: (CameraPosition cameraPosition,
+              CameraUpdateReason reason, bool finished) {
+            print('Camera position: $cameraPosition, Reason: $reason');
+
+            if (finished) {
+              print('Camera position movement has been finished');
+            }
+          },
+        ),
       ),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _mapController.future;
-    justBool ? controller.animateCamera(CameraUpdate.newCameraPosition(_goingCameraPosition))
-        : controller.animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
-    justBool = !justBool;
+  Future<void> _requestRoutes() async {
+    if (mapObjects.length > 1) {
+      print('Points: ${placeMarkers[0].point},${placeMarkers[1].point}');
+
+      var resultWithSession = YandexDriving.requestRoutes(
+          points: [
+            RequestPoint(
+                point: placeMarkers[0].point,
+                requestPointType: RequestPointType.wayPoint),
+            RequestPoint(
+                point: placeMarkers[1].point,
+                requestPointType: RequestPointType.wayPoint),
+          ],
+          drivingOptions: const DrivingOptions(
+              initialAzimuth: 0, routesCount: 5, avoidTolls: true));
+
+      setState(() {
+        session = resultWithSession.session;
+        result = resultWithSession.result;
+      });
+    }
   }
 
-  void _onMapCreated(GoogleMapController controller){
+  Future<void> _close() async {
+    await session.close();
+  }
+
+  Future<void> _init() async {
+    await _handleResult(await result);
+  }
+
+  Future<void> _handleResult(DrivingSessionResult result) async {
+    if (result.error != null) {
+      print('Error: ${result.error}');
+      return;
+    }
+
     setState(() {
-      // _markers.add(
-      //   marker1,
-      // );
+      results.add(result);
+    });
+    setState(() {
+      // result.routes!.asMap().forEach((i, route) {
+      //   mapObjects.add(PolylineMapObject(
+      //     mapId: MapObjectId('route_${i}_polyline'),
+      //     polyline: Polyline(points: route.geometry),
+      //     strokeColor:
+      //         Colors.primaries[Random().nextInt(Colors.primaries.length)],
+      //     strokeWidth: 3,
+      //   ));
+      // });
+
+      mapObjects.add(PolylineMapObject(
+        mapId: MapObjectId('route_0_polyline'),
+        polyline: Polyline(points: result.routes!.first.geometry),
+        strokeColor:
+            Colors.primaries[Random().nextInt(Colors.primaries.length)],
+        strokeWidth: 3,
+      ));
     });
   }
 }

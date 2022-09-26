@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
    <application
+       android:usesCleartextTraffic="true"
        tools:replace="android:label"
         android:label="Delivery App"
         android:icon="@mipmap/ic_launcher">

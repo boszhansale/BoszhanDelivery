@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/views/currentPage/order_info_page.dart';
+import 'package:boszhan_delivery_app/views/map/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:url_launcher/url_launcher.dart';
 
 List<String> paymentTypeNames = [
   "💵Наличный",
@@ -125,10 +125,15 @@ class OrderCard extends StatelessWidget {
                             onPressed: () {
                               if (order.storeLat != '' &&
                                   order.storeLng != '') {
-                                launch(
-                                    'dgis://2gis.ru/routeSearch/rsType/car/to/${order.storeLng},${order.storeLat}');
                                 // launch(
-                                //     'yandexmaps://maps.yandex.ru/?ll=${order.storeLng},${order.storeLat}');
+                                //     'dgis://2gis.ru/routeSearch/rsType/car/to/${order.storeLng},${order.storeLat}');
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MapPage(
+                                            double.parse(order.storeLat),
+                                            double.parse(order.storeLng))));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
@@ -136,12 +141,6 @@ class OrderCard extends StatelessWidget {
                                       style: TextStyle(fontSize: 20)),
                                 ));
                               }
-
-                              // launch('https://www.google.com');
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => const MapPage()));
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.grey,
