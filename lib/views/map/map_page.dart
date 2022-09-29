@@ -1,21 +1,21 @@
 import 'dart:async';
-import 'dart:math';
 
+import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage(this.lat, this.lng);
-  final double lat;
-  final double lng;
+  MapPage(this.orders);
+  final List<Order> orders;
 
   @override
   State<MapPage> createState() => MapPageState();
 }
 
 class MapPageState extends State<MapPage> {
+  GlobalKey mapKey = GlobalKey();
   final List<DrivingSessionResult> results = [];
   late Future<DrivingSessionResult> result;
   late DrivingSession session;
@@ -27,6 +27,50 @@ class MapPageState extends State<MapPage> {
   List<PlacemarkMapObject> placeMarkers = [];
   final animation =
       const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
+
+  int level = 0;
+  Color trafficColor = Colors.white;
+
+  late Timer _timer;
+  int _start = 2;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+            initMapSettings();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  Color _colorFromTraffic(TrafficColor trafficColor) {
+    switch (trafficColor) {
+      case TrafficColor.red:
+        return Colors.red;
+      case TrafficColor.yellow:
+        return Colors.yellow;
+      case TrafficColor.green:
+        return Colors.green;
+      default:
+        return Colors.white;
+    }
+  }
+
+  LocationSettings locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.high, //accuracy of the location data
+    distanceFilter: 1, //minimum distance (measured in meters) a
+    //device must move horizontally before an update event is generated;
+  );
 
   void getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -43,47 +87,120 @@ class MapPageState extends State<MapPage> {
             scale: 0.4)),
       );
 
-      var endPlacemark = PlacemarkMapObject(
-          mapId: const MapObjectId('end_placemark'),
-          point: Point(latitude: widget.lat, longitude: widget.lng),
-          icon: PlacemarkIcon.single(PlacemarkIconStyle(
-              image:
-                  BitmapDescriptor.fromAssetImage('assets/icons/route_end.png'),
-              scale: 0.4)));
+      var myLocPlacemark = PlacemarkMapObject(
+        mapId: const MapObjectId('my_loc_placemark'),
+        point:
+            Point(latitude: position.latitude, longitude: position.longitude),
+        icon: PlacemarkIcon.single(PlacemarkIconStyle(
+            image: BitmapDescriptor.fromAssetImage('assets/icons/user.png'),
+            scale: 0.6)),
+      );
+      mapObjects.add(myLocPlacemark);
 
       mapObjects.add(startPlacemark);
-      mapObjects.add(endPlacemark);
       placeMarkers.add(startPlacemark);
-      placeMarkers.add(endPlacemark);
+
+      for (int i = 0; i < widget.orders.length; i++) {
+        var endPlacemark = PlacemarkMapObject(
+            mapId: MapObjectId('end_placemark_$i'),
+            point: Point(
+                latitude: double.parse(widget.orders[i].storeLat),
+                longitude: double.parse(widget.orders[i].storeLng)),
+            icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                image: BitmapDescriptor.fromAssetImage(
+                    'assets/icons/route_end.png'),
+                scale: 0.4)));
+
+        mapObjects.add(endPlacemark);
+        placeMarkers.add(endPlacemark);
+      }
 
       _requestRoutes();
       _init();
     });
+  }
+
+  void locationDidChanged() async {
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) async {
+      setState(() {
+        mapObjects.removeAt(1);
+        var myLocPlacemark = PlacemarkMapObject(
+          mapId: const MapObjectId('my_loc_placemark'),
+          point:
+              Point(latitude: position.latitude, longitude: position.longitude),
+          icon: PlacemarkIcon.single(PlacemarkIconStyle(
+              image: BitmapDescriptor.fromAssetImage('assets/icons/user.png'),
+              scale: 0.6)),
+        );
+        mapObjects.insert(1, myLocPlacemark);
+      });
+
+      await controller.moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: Point(
+                latitude: position.latitude,
+                longitude: position.longitude,
+              ),
+              tilt: 45,
+              zoom: 20,
+            ),
+          ),
+          animation: animation);
+    });
+  }
+
+  void initMapSettings() async {
+    await controller.toggleTrafficLayer(visible: true);
 
     final newBounds = BoundingBox(
       northEast: placeMarkers[0].point,
-      southWest: placeMarkers[1].point,
+      southWest: placeMarkers[placeMarkers.length - 1].point,
     );
     await controller.moveCamera(
         CameraUpdate.newTiltAzimuthBounds(newBounds, azimuth: 1, tilt: 1),
         animation: animation);
     await controller.moveCamera(CameraUpdate.zoomOut(), animation: animation);
+    await controller.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: Point(
+              latitude: placeMarkers[0].point.latitude,
+              longitude: placeMarkers[0].point.longitude,
+            ),
+          ),
+        ),
+        animation: animation);
 
-    // await controller.moveCamera(
-    //     CameraUpdate.newCameraPosition(CameraPosition(
-    //         target: Point(latitude: widget.lat, longitude: widget.lng))),
-    //     animation: animation);
+    // final mediaQuery = MediaQuery.of(context);
+    // final height =
+    //     mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+    // final width =
+    //     mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+    //
+    // await controller.toggleUserLayer(
+    //   visible: true,
+    //   autoZoomEnabled: true,
+    //   anchor: UserLocationAnchor(
+    //     normal: Offset(0.6 * height, 0.4 * width),
+    //     course: Offset(0.4 * height, 0.2 * width),
+    //   ),
+    // );
   }
 
   @override
   void initState() {
     super.initState();
     getCurrentLocation();
+    locationDidChanged();
+    startTimer();
   }
 
   @override
   void dispose() {
     _close();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -97,6 +214,38 @@ class MapPageState extends State<MapPage> {
         height: MediaQuery.of(context).size.height - 60,
         child: YandexMap(
           mapObjects: mapObjects,
+          key: mapKey,
+          onUserLocationAdded: (UserLocationView view) async {
+            return view.copyWith(
+                pin: view.pin.copyWith(
+                  icon: PlacemarkIcon.single(
+                    PlacemarkIconStyle(
+                      image: BitmapDescriptor.fromAssetImage(
+                          'assets/icons/user.png'),
+                      scale: 0.4,
+                    ),
+                  ),
+                ),
+                // arrow: view.arrow.copyWith(
+                //   icon: PlacemarkIcon.single(
+                //     PlacemarkIconStyle(
+                //       image: BitmapDescriptor.fromAssetImage(
+                //           'assets/icons/arrow.png'),
+                //       scale: 0.4,
+                //     ),
+                //   ),
+                // ),
+                accuracyCircle: view.accuracyCircle
+                    .copyWith(fillColor: Colors.green.withOpacity(0.5)));
+          },
+          onTrafficChanged: (TrafficLevel? trafficLevel) {
+            setState(() {
+              level = trafficLevel?.level ?? 0;
+              trafficColor = trafficLevel != null
+                  ? _colorFromTraffic(trafficLevel.color)
+                  : Colors.white;
+            });
+          },
           onMapCreated: (YandexMapController yandexMapController) async {
             controller = yandexMapController;
 
@@ -122,19 +271,15 @@ class MapPageState extends State<MapPage> {
 
   Future<void> _requestRoutes() async {
     if (mapObjects.length > 1) {
-      print('Points: ${placeMarkers[0].point},${placeMarkers[1].point}');
-
       var resultWithSession = YandexDriving.requestRoutes(
           points: [
-            RequestPoint(
-                point: placeMarkers[0].point,
-                requestPointType: RequestPointType.wayPoint),
-            RequestPoint(
-                point: placeMarkers[1].point,
-                requestPointType: RequestPointType.wayPoint),
+            for (int i = 0; i < placeMarkers.length; i++)
+              RequestPoint(
+                  point: placeMarkers[i].point,
+                  requestPointType: RequestPointType.wayPoint),
           ],
           drivingOptions: const DrivingOptions(
-              initialAzimuth: 0, routesCount: 5, avoidTolls: true));
+              initialAzimuth: 0, routesCount: 1, avoidTolls: true));
 
       setState(() {
         session = resultWithSession.session;
@@ -161,23 +306,22 @@ class MapPageState extends State<MapPage> {
       results.add(result);
     });
     setState(() {
-      // result.routes!.asMap().forEach((i, route) {
-      //   mapObjects.add(PolylineMapObject(
-      //     mapId: MapObjectId('route_${i}_polyline'),
-      //     polyline: Polyline(points: route.geometry),
-      //     strokeColor:
-      //         Colors.primaries[Random().nextInt(Colors.primaries.length)],
-      //     strokeWidth: 3,
-      //   ));
-      // });
+      result.routes!.asMap().forEach((i, route) {
+        mapObjects.add(PolylineMapObject(
+          mapId: MapObjectId('route_${i}_polyline'),
+          polyline: Polyline(points: route.geometry),
+          strokeColor: Colors.blue,
+          strokeWidth: 3,
+        ));
+      });
 
-      mapObjects.add(PolylineMapObject(
-        mapId: MapObjectId('route_0_polyline'),
-        polyline: Polyline(points: result.routes!.first.geometry),
-        strokeColor:
-            Colors.primaries[Random().nextInt(Colors.primaries.length)],
-        strokeWidth: 3,
-      ));
+      // mapObjects.add(PolylineMapObject(
+      //   mapId: MapObjectId('route_0_polyline'),
+      //   polyline: Polyline(points: result.routes!.first.geometry),
+      //   strokeColor:
+      //       Colors.primaries[Random().nextInt(Colors.primaries.length)],
+      //   strokeWidth: 3,
+      // ));
     });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:boszhan_delivery_app/components/order_card.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
+import 'package:boszhan_delivery_app/views/map/map_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +40,51 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
           appBar: PreferredSize(
               preferredSize: Size.fromHeight(60.0),
               child: buildAppBar('Текущие заказы')),
-          body: ListView.separated(
-              itemCount: orders.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  OrderCard(orders[index]),
-              separatorBuilder: (context, index) {
-                return Divider();
-              }),
+          body: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 160,
+                child: ListView.separated(
+                    itemCount: orders.length,
+                    itemBuilder: (BuildContext context, int index) =>
+                        OrderCard(orders[index]),
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    }),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 70,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: ElevatedButton(
+                    child: const Text("МАРШРУТ"),
+                    onPressed: () {
+                      if (orders.length > 0) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapPage(orders)));
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Список заказов пуст.",
+                              style: TextStyle(fontSize: 20)),
+                        ));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      textStyle:
+                          const TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ));
   }
 

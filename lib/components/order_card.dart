@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/views/currentPage/order_info_page.dart';
-import 'package:boszhan_delivery_app/views/map/map_page.dart';
+import 'package:boszhan_delivery_app/views/map/order_map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
@@ -131,9 +131,8 @@ class OrderCard extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MapPage(
-                                            double.parse(order.storeLat),
-                                            double.parse(order.storeLng))));
+                                        builder: (context) =>
+                                            OrderMapPage(order)));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(

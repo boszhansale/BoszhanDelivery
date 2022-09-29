@@ -87,6 +87,8 @@ flutter:
     - assets/icons/route_end.png
     - assets/icons/route_start.png
     - assets/icons/route_stop_by.png
+    - assets/icons/user.png
+    - assets/icons/arrow.png
     - assets/fonts/Roboto-Regular.ttf
     - assets/fonts/Roboto-Bold.ttf
     - assets/fonts/Roboto-Thin.ttf
