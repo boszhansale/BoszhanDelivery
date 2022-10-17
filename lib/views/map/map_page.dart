@@ -101,18 +101,21 @@ class MapPageState extends State<MapPage> {
       placeMarkers.add(startPlacemark);
 
       for (int i = 0; i < widget.orders.length; i++) {
-        var endPlacemark = PlacemarkMapObject(
-            mapId: MapObjectId('end_placemark_$i'),
-            point: Point(
-                latitude: double.parse(widget.orders[i].storeLat),
-                longitude: double.parse(widget.orders[i].storeLng)),
-            icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                image: BitmapDescriptor.fromAssetImage(
-                    'assets/icons/route_end.png'),
-                scale: 0.4)));
+        if (widget.orders[i].storeLat != null &&
+            widget.orders[i].storeLng != null) {
+          var endPlacemark = PlacemarkMapObject(
+              mapId: MapObjectId('end_placemark_$i'),
+              point: Point(
+                  latitude: double.parse(widget.orders[i].storeLat),
+                  longitude: double.parse(widget.orders[i].storeLng)),
+              icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                  image: BitmapDescriptor.fromAssetImage(
+                      'assets/icons/route_end.png'),
+                  scale: 0.4)));
 
-        mapObjects.add(endPlacemark);
-        placeMarkers.add(endPlacemark);
+          mapObjects.add(endPlacemark);
+          placeMarkers.add(endPlacemark);
+        }
       }
 
       _requestRoutes();

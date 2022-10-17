@@ -180,8 +180,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-              Image.asset("assets/images/logo.png",
-                  width: MediaQuery.of(context).size.width * 0.5),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Image.asset("assets/images/logo.png",
+                    width: MediaQuery.of(context).size.width * 0.5),
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 80, vertical: 10),

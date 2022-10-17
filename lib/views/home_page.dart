@@ -111,38 +111,52 @@ class _HomePageState extends State<HomePage> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Text('Версия: $version',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 0),
                       child: Text('Имя водителя: ' + name,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: Text('Наличные: ' + nal,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 0),
                       child: Text('Безналичные: ' + bezNal,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: Text('Kaspi.kz: ' + kaspi,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
-                    Image.asset("assets/images/logo.png",
-                        width: MediaQuery.of(context).size.width * 0.4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      child: Image.asset("assets/images/logo.png",
+                          width: MediaQuery.of(context).size.width * 0.4),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 30, left: 30, bottom: 20),
+                      child: Text(
+                        'Bız bar yqylasymyzben jäne tolyq jauapkerşılıgımızben kün saiyn adamdar tañdaityn önımderdı daiyndaimyz',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
