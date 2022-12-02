@@ -60,169 +60,196 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
               elevation: 0,
               centerTitle: true,
-              title: Text('Доставка',
+              title: const Text('Доставка',
                   style: TextStyle(color: Colors.white, fontSize: 20)),
               automaticallyImplyLeading: true,
               backgroundColor: Colors.red,
               bottomOpacity: 1,
-              iconTheme: IconThemeData(color: Colors.white)),
+              iconTheme: const IconThemeData(color: Colors.white)),
           body: SingleChildScrollView(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    newVersion
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text("Доступна новая версия!"),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: 300,
-                                height: 80,
-                                child: ElevatedButton(
-                                  child: const Text(
-                                    'Скачать',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.black),
+            child: Stack(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height + 100,
+                  child: Image.asset(
+                    'assets/images/bg_image.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        newVersion
+                            ? Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
                                   ),
-                                  onPressed: () {
-                                    downloadNewVersion();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
-                                    textStyle: const TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                  const Text("Доступна новая версия!"),
+                                  const SizedBox(
+                                    height: 20,
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 300,
+                                    height: 80,
+                                    child: ElevatedButton(
+                                      child: const Text(
+                                        'Скачать',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                      onPressed: () {
+                                        downloadNewVersion();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red,
+                                        textStyle: const TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text('Версия: $version',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          child: Text('Имя водителя: ' + name,
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text('Наличные: ' + nal,
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          child: Text('Безналичные: ' + bezNal,
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text('Kaspi.kz: ' + kaspi,
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: Image.asset("assets/images/logo.png",
+                              width: MediaQuery.of(context).size.width * 0.4),
+                        ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.only(right: 30, left: 30, bottom: 20),
+                          child: Text(
+                            'Bız bar yqylasymyzben jäne tolyq jauapkerşılıgımızben kün saiyn adamdar tañdaityn önımderdı daiyndaimyz',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.only(right: 30, left: 30, bottom: 20),
+                          child: Text(
+                            'Мы с душой и полной ответственностью создаем продукты, которые каждый день выбирают люди',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 300,
+                            height: 80,
+                            child: ElevatedButton(
+                              child: const Text("ТЕКУЩИЕ"),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CurrentOrdersPage()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                textStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
                               ),
-                            ],
-                          )
-                        : SizedBox(),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: Text('Версия: $version',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 0),
-                      child: Text('Имя водителя: ' + name,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Text('Наличные: ' + nal,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 0),
-                      child: Text('Безналичные: ' + bezNal,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Text('Kaspi.kz: ' + kaspi,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: Image.asset("assets/images/logo.png",
-                          width: MediaQuery.of(context).size.width * 0.4),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(right: 30, left: 30, bottom: 20),
-                      child: Text(
-                        'Bız bar yqylasymyzben jäne tolyq jauapkerşılıgımızben kün saiyn adamdar tañdaityn önımderdı daiyndaimyz',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 300,
-                        height: 80,
-                        child: ElevatedButton(
-                          child: const Text("ТЕКУЩИЕ"),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CurrentOrdersPage()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            textStyle: const TextStyle(
-                                color: Colors.white, fontSize: 18),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 300,
-                        height: 80,
-                        child: ElevatedButton(
-                          child: const Text("ВЫПОЛНЕННЫЕ"),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrdersHistoryPage()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            textStyle: const TextStyle(
-                                color: Colors.white, fontSize: 18),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 300,
+                            height: 80,
+                            child: ElevatedButton(
+                              child: const Text("ВЫПОЛНЕННЫЕ"),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            OrdersHistoryPage()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                textStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 300,
-                        height: 80,
-                        child: ElevatedButton(
-                          child: const Text("ЗАГРУЗИТЬ"),
-                          onPressed: () {
-                            downloadAction();
-                            checkVersion();
-                            getProfileInfo();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 60, vertical: 20),
-                            textStyle: const TextStyle(
-                                color: Colors.white, fontSize: 18),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 300,
+                            height: 80,
+                            child: ElevatedButton(
+                              child: const Text("ЗАГРУЗИТЬ"),
+                              onPressed: () {
+                                downloadAction();
+                                checkVersion();
+                                getProfileInfo();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blue,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 60, vertical: 20),
+                                textStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                  ],
-                )),
+                        )
+                      ],
+                    )),
+              ],
+            ),
           ),
         ));
   }
